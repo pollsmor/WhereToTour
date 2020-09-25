@@ -1,15 +1,45 @@
 import 'package:flutter/material.dart';
+import 'CountriesAPI.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  HomePage();
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  Future<List<Country>> countries;
+
+  @override
+  void initState() {
+    countries = fetchCountries('all');
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Hello World!")),
-      body: Center(
-        child: Column(
-          children: [
-            RegionPicker(),
-          ],
-        ),
+      appBar: AppBar(title: Text('WhereToTour')),
+      body: FutureBuilder<List<Country>>(
+        future: countries,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            print(snapshot.data[0].name);
+            return Column(
+
+            );
+          } else {
+            return Center(
+              child: !(snapshot.hasError)
+                  ? CircularProgressIndicator()
+                  : Container(
+                      child: Text('${snapshot.error}'),
+                      padding: EdgeInsets.all(8.0),
+                    ),
+            );
+          }
+        },
       ),
     );
   }
@@ -23,7 +53,7 @@ class RegionPicker extends StatefulWidget {
 }
 
 class _RegionPickerState extends State<RegionPicker> {
-  String dropdownValue = 'Americas';
+  String dropdownValue = 'All';
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +72,8 @@ class _RegionPickerState extends State<RegionPicker> {
           dropdownValue = newValue;
         });
       },
-      items: <String>['Americas', 'Europe', 'Oceania', 'Asia', 'Africa'].map<DropdownMenuItem<String>>((String value) {
+      items: <String>['All', 'Americas', 'Europe', 'Oceania', 'Asia', 'Africa']
+          .map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
           child: Text(value),
