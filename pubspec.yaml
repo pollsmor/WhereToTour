@@ -1,5 +1,5 @@
 name: where_to_tour
-description: An app that suggests destinations to go to.
+description: An app that suggests destinations to visit.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -76,3 +76,5 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  assets:
+    - .env
