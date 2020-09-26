@@ -1,15 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'CountriesAPI.dart';
-
-final colors = [
-  Colors.pink,
-  Colors.red,
-  Colors.teal,
-  Colors.blueAccent,
-  Colors.indigoAccent,
-  Colors.deepPurpleAccent,
-  Colors.brown
-];
 
 class HomePage extends StatefulWidget {
   HomePage();
@@ -43,7 +35,7 @@ class _HomePageState extends State<HomePage> {
                     itemCount: snapshot.data.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Container(
-                        child: CountryCard(country: snapshot.data[index], colorIndex: index % colors.length),
+                        child: CountryCard(country: snapshot.data[index]),
                         padding: EdgeInsets.all(8.0),
                       );
                     },
@@ -107,21 +99,54 @@ class _RegionPickerState extends State<RegionPicker> {
 
 class CountryCard extends StatelessWidget {
   final Country country;
-  final int colorIndex;
 
-  CountryCard({this.country, this.colorIndex});
+  CountryCard({this.country});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text(
-        country.name,
-        style: TextStyle(
-          fontSize: 24.0,
-        ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 3,
+            child: Container(
+              child: SvgPicture.network(
+                country.flagURL,
+                semanticsLabel: country.name,
+                placeholderBuilder: (BuildContext context) => Container(
+                  child: Center(
+                    child: SizedBox(
+                      child: CircularProgressIndicator(),
+                      height: 64.0,
+                      width: 32.0,
+                    ),
+                  ),
+                  padding: EdgeInsets.all(8.0),
+                ),
+              ),
+              width: 64.0,
+              height: 64.0,
+              margin: EdgeInsets.all(8.0),
+            ),
+          ),
+          Expanded(
+            flex: 10,
+            child: Container(
+              child: Text(
+                country.name,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 20.0,
+                ),
+              ),
+              padding: EdgeInsets.all(8.0),
+            ),
+          )
+        ],
       ),
-      height: 256.0,
-      color: colors[colorIndex],
+      height: 64.0,
     );
   }
 }
