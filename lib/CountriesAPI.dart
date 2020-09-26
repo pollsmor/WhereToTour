@@ -27,7 +27,7 @@ class Country {
   final String callingCode;
   final String capital;
   final int population;
-  final int area; // in sq km
+  final double area; // in sq km
   final double latitude, longitude;
   final List<String> currencies;
   final List<String> languages;
@@ -59,6 +59,7 @@ class Country {
         callingCode: json['callingCodes'][0],
         capital: json['capital'],
         population: json['population'],
+        area: json['area'],
         latitude: json['latlng'].length != 0 ? json['latlng'][0] : null,
         longitude: json['latlng'].length != 0 ? json['latlng'][1] : null,
         currencies: currencies,
