@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'CountriesAPI.dart';
 
 class CountryPage extends StatelessWidget {
@@ -13,14 +14,20 @@ class CountryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        elevation: 0.0,
-      ),
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.blueAccent[700]),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          elevation: 0.0,
+          bottom: PreferredSize(
+              child: Container(
+                color: Colors.grey[100],
+                height: 1.0,
+              ),
+              preferredSize: Size.fromHeight(4.0))),
       body: Column(
         children: [
           Expanded(
@@ -70,6 +77,8 @@ class CountryPage extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     fontSize: 20.0,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 2.0,
                                   ),
                                 ),
                                 padding: EdgeInsets.all(8.0),
@@ -77,7 +86,12 @@ class CountryPage extends StatelessWidget {
                               Row(
                                 children: [
                                   Icon(Icons.star_border),
-                                  Text(country.capital),
+                                  Text(
+                                    country.capital,
+                                    style: TextStyle(
+                                      fontSize: 16.0,
+                                    ),
+                                  ),
                                 ],
                               ),
                             ],
@@ -93,14 +107,26 @@ class CountryPage extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Top level domain"),
+                            Text(
+                              "Top level domain",
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                color: Colors.pink,
+                              ),
+                            ),
                             Text(country.tld),
                           ],
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Text("Calling code"),
+                            Text(
+                              "Calling code",
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                color: Colors.blue,
+                              ),
+                            ),
                             Text("+" + country.callingCode),
                           ],
                         ),
@@ -114,14 +140,26 @@ class CountryPage extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Population"),
+                            Text(
+                              "Population",
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                color: Colors.teal,
+                              ),
+                            ),
                             Text("${country.population}"),
                           ],
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Text("Area"),
+                            Text(
+                              "Area",
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                color: Colors.green,
+                              ),
+                            ),
                             Text("${country.area}"),
                           ],
                         ),
@@ -135,16 +173,40 @@ class CountryPage extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Languages"),
+                            Text(
+                              "Languages",
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                color: Colors.indigoAccent,
+                              ),
+                            ),
                             Text("${country.languages}"),
                           ],
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text("Currencies"),
-                            Text("${country.currencies}"),
-                          ],
+                        InkWell(
+                          child: Container(
+                            padding: EdgeInsets.all(4.0),
+                            decoration: BoxDecoration(
+                              border: Border.all(width: 2.0, color: Colors.blueAccent),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  "Currencies",
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    color: Colors.brown,
+                                  ),
+                                ),
+                                Text("${country.currencies}"),
+                              ],
+                            ),
+                          ),
+                          onTap: () {
+                            _launchURL(country.currencies[0] + " to USD");
+                          },
                         ),
                       ],
                     ),
@@ -169,6 +231,15 @@ class CountryPage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  _launchURL(String query) async {
+    String url = "https://www.google.com/search?q=" + query;
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }
 

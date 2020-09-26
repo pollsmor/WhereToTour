@@ -26,32 +26,40 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('WhereToTour')),
       body: FutureBuilder<List<Country>>(
         future: countries,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      child: RegionPicker(),
-                      color: Colors.white,
+                Container(
+                  margin: EdgeInsets.fromLTRB(8.0, 32.0, 8.0, 16.0),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 2.0,
+                      color: Colors.grey[100],
                     ),
-                    Container(
-                      color: Colors.white,
-                      padding: EdgeInsets.all(8.0),
-                      child: DensityPicker(),
-                    ),
-                  ],
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        child: RegionPicker(),
+                        color: Colors.white,
+                      ),
+                      Container(
+                        color: Colors.white,
+                        padding: EdgeInsets.all(8.0),
+                        child: DensityPicker(),
+                      ),
+                    ],
+                  ),
                 ),
                 Expanded(
                   child: ListView.builder(
                     itemCount: snapshot.data.length,
                     itemBuilder: (BuildContext context, int index) {
-                      print(density);
                       if (snapshot.data[index].area == null) {
                         return Container();
                       }
@@ -60,12 +68,11 @@ class _HomePageState extends State<HomePage> {
                         if (snapshot.data[index].population /
                                 snapshot.data[index].area >
                             50) {
-                          print("xd");
                           return Container();
                         } else {
                           return Container(
                             child: CountryCard(country: snapshot.data[index]),
-                            padding: EdgeInsets.all(4.0),
+                            padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 16.0),
                           );
                         }
                       } else if (density == "Medium") {
@@ -79,7 +86,7 @@ class _HomePageState extends State<HomePage> {
                         } else {
                           return Container(
                             child: CountryCard(country: snapshot.data[index]),
-                            padding: EdgeInsets.all(4.0),
+                            padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 16.0),
                           );
                         }
                       } else if (density == "High") {
@@ -90,14 +97,14 @@ class _HomePageState extends State<HomePage> {
                         } else {
                           return Container(
                             child: CountryCard(country: snapshot.data[index]),
-                            padding: EdgeInsets.all(4.0),
+                            padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 16.0),
                           );
                         }
                       }
 
                       return Container(
                         child: CountryCard(country: snapshot.data[index]),
-                        padding: EdgeInsets.all(4.0),
+                        padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 16.0),
                       );
                     },
                   ),
@@ -139,10 +146,10 @@ class _RegionPickerState extends State<RegionPicker> {
           icon: Icon(Icons.language),
           iconSize: 24,
           elevation: 16,
-          style: TextStyle(color: Colors.deepPurple),
+          style: TextStyle(color: Colors.blueAccent[700]),
           underline: Container(
             height: 2,
-            color: Colors.deepPurpleAccent,
+            color: Colors.blueAccent[700],
           ),
           onChanged: (String newValue) {
             setState(() {
@@ -192,10 +199,10 @@ class _DensityPickerState extends State<DensityPicker> {
           icon: Icon(Icons.accessibility),
           iconSize: 24,
           elevation: 16,
-          style: TextStyle(color: Colors.deepPurple),
+          style: TextStyle(color: Colors.blueAccent[700]),
           underline: Container(
             height: 2,
-            color: Colors.deepPurpleAccent,
+            color: Colors.blueAccent[700],
           ),
           onChanged: (String newValue) {
             setState(() {

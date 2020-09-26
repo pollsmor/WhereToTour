@@ -56,6 +56,7 @@ class Country {
     List<String> languages = List<String>();
     for (var language in json['languages']) languages.add(language['name']);
 
+    // List taken from https://www.cheatsheet.com/culture/the-most-difficult-countries-in-the-world-for-americans-to-visit.html/
     bool hardToVisit = false;
     if (json['name'] == 'Russia' ||
         json['name'] == 'Cuba' ||
