@@ -12,10 +12,15 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Future<List<Country>> countries;
+  bool lowDensity, medDensity, highDensity;
 
   @override
   void initState() {
     countries = fetchCountries('All');
+    lowDensity = true;
+    medDensity = true;
+    highDensity = true;
+
     super.initState();
   }
 
@@ -29,7 +34,80 @@ class _HomePageState extends State<HomePage> {
           if (snapshot.hasData) {
             return Column(
               children: [
-                RegionPicker(),
+                Container(
+                  child: RegionPicker(),
+                  color: Colors.white,
+                ),
+                Container(
+                  color: Colors.white,
+                  padding: EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text("Population density"),
+                      GestureDetector(
+                        child: Container(
+                          child: Text(
+                            "Low",
+                            style: TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                          padding: EdgeInsets.all(8.0),
+                          width: 72.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: lowDensity ? Colors.green : Colors.black,
+                          ),
+                        ),
+                        onTap: () {
+                          setState(() {
+                            lowDensity = !lowDensity;
+                          });
+                        },
+                      ),
+                      GestureDetector(
+                        child: Container(
+                          child: Text(
+                            "Medium",
+                            style: TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                          padding: EdgeInsets.all(8.0),
+                          width: 72.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: medDensity ? Colors.orangeAccent[700] : Colors.black,
+                          ),
+                        ),
+                        onTap: () {
+                          setState(() {
+                            medDensity = !medDensity;
+                          });
+                        },
+                      ),
+                      GestureDetector(
+                        child: Container(
+                          child: Text(
+                            "High",
+                            style: TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                          padding: EdgeInsets.all(8.0),
+                          width: 72.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: highDensity ? Colors.red : Colors.black,
+                          ),
+                        ),
+                        onTap: () {
+                          setState(() {
+                            highDensity = !highDensity;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
                 Expanded(
                   child: ListView.builder(
                     itemCount: snapshot.data.length,
@@ -71,28 +149,40 @@ class _RegionPickerState extends State<RegionPicker> {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<String>(
-      value: dropdownValue,
-      icon: Icon(Icons.language),
-      iconSize: 24,
-      elevation: 16,
-      style: TextStyle(color: Colors.deepPurple),
-      underline: Container(
-        height: 2,
-        color: Colors.deepPurpleAccent,
-      ),
-      onChanged: (String newValue) {
-        setState(() {
-          dropdownValue = newValue;
-        });
-      },
-      items: <String>['All', 'Americas', 'Europe', 'Oceania', 'Asia', 'Africa']
-          .map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text("Select a region:  "),
+        DropdownButton<String>(
+          value: dropdownValue,
+          icon: Icon(Icons.language),
+          iconSize: 24,
+          elevation: 16,
+          style: TextStyle(color: Colors.deepPurple),
+          underline: Container(
+            height: 2,
+            color: Colors.deepPurpleAccent,
+          ),
+          onChanged: (String newValue) {
+            setState(() {
+              dropdownValue = newValue;
+            });
+          },
+          items: <String>[
+            'All',
+            'Americas',
+            'Europe',
+            'Oceania',
+            'Asia',
+            'Africa'
+          ].map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+        ),
+      ],
     );
   }
 }
