@@ -16,9 +16,10 @@ class MyApp extends StatelessWidget {
         textTheme: TextTheme(
           //bodyText2: TextStyle(color: Colors.white),
         ),
+        scaffoldBackgroundColor: Colors.white,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: HomePage(),
+      home: HomePage(region: 'All'),
       debugShowCheckedModeBanner: false,
     );
   }

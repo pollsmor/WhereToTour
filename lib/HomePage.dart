@@ -1,10 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'CountriesAPI.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage();
+  final String region;
+
+  HomePage({this.region});
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -16,7 +17,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    countries = fetchCountries('All');
+    countries = fetchCountries(widget.region);
     lowDensity = true;
     medDensity = true;
     highDensity = true;
@@ -76,7 +77,9 @@ class _HomePageState extends State<HomePage> {
                           width: 72.0,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            color: medDensity ? Colors.orangeAccent[700] : Colors.black,
+                            color: medDensity
+                                ? Colors.orangeAccent[700]
+                                : Colors.black,
                           ),
                         ),
                         onTap: () {
@@ -145,7 +148,7 @@ class RegionPicker extends StatefulWidget {
 }
 
 class _RegionPickerState extends State<RegionPicker> {
-  String dropdownValue = 'All';
+  String region = 'All';
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +157,7 @@ class _RegionPickerState extends State<RegionPicker> {
       children: [
         Text("Select a region:  "),
         DropdownButton<String>(
-          value: dropdownValue,
+          value: region,
           icon: Icon(Icons.language),
           iconSize: 24,
           elevation: 16,
@@ -165,7 +168,12 @@ class _RegionPickerState extends State<RegionPicker> {
           ),
           onChanged: (String newValue) {
             setState(() {
-              dropdownValue = newValue;
+              region = newValue;
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => HomePage(region: region),
+                  ));
             });
           },
           items: <String>[
