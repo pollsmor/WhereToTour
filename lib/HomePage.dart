@@ -1,6 +1,16 @@
 import 'package:flutter/material.dart';
 import 'CountriesAPI.dart';
 
+final colors = [
+  Colors.pink,
+  Colors.red,
+  Colors.teal,
+  Colors.blueAccent,
+  Colors.indigoAccent,
+  Colors.deepPurpleAccent,
+  Colors.brown
+];
+
 class HomePage extends StatefulWidget {
   HomePage();
 
@@ -13,7 +23,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    countries = fetchCountries('all');
+    countries = fetchCountries('All');
     super.initState();
   }
 
@@ -30,11 +40,11 @@ class _HomePageState extends State<HomePage> {
                 RegionPicker(),
                 Expanded(
                   child: ListView.builder(
-                    padding: EdgeInsets.all(8.0),
                     itemCount: snapshot.data.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Container(
-                        child: Text(snapshot.data[index].name),
+                        child: CountryCard(country: snapshot.data[index], colorIndex: index % colors.length),
+                        padding: EdgeInsets.all(8.0),
                       );
                     },
                   ),
@@ -91,6 +101,27 @@ class _RegionPickerState extends State<RegionPicker> {
           child: Text(value),
         );
       }).toList(),
+    );
+  }
+}
+
+class CountryCard extends StatelessWidget {
+  final Country country;
+  final int colorIndex;
+
+  CountryCard({this.country, this.colorIndex});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Text(
+        country.name,
+        style: TextStyle(
+          fontSize: 24.0,
+        ),
+      ),
+      height: 256.0,
+      color: colors[colorIndex],
     );
   }
 }

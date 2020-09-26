@@ -13,6 +13,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'WhereToTour',
       theme: ThemeData(
+        textTheme: TextTheme(
+          bodyText2: TextStyle(color: Colors.white),
+        ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: HomePage(),

@@ -6,7 +6,7 @@ const base_url = 'https://restcountries.eu/rest/v2/';
 
 Future<List<Country>> fetchCountries(String region) async {
   // by region
-  final response = (region == 'all') // different API endpoint if we want "all" countries
+  final response = (region == 'All') // different API endpoint if we want "all" countries
       ? await http.get(base_url + 'all')
       : await http.get(base_url + 'region/' + region);
 
