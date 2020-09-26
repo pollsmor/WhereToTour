@@ -149,6 +149,15 @@ class CountryPage extends StatelessWidget {
                       ],
                     ),
                   ),
+                  country.hardToVisit
+                      ? Text(
+                          "This country may be particularly difficult to visit for U.S. citizens.",
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      : Container(),
                 ],
               ),
             ),

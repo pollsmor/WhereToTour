@@ -33,14 +33,19 @@ class _HomePageState extends State<HomePage> {
           if (snapshot.hasData) {
             return Column(
               children: [
-                Container(
-                  child: RegionPicker(),
-                  color: Colors.white,
-                ),
-                Container(
-                  color: Colors.white,
-                  padding: EdgeInsets.all(8.0),
-                  child: DensityPicker(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      child: RegionPicker(),
+                      color: Colors.white,
+                    ),
+                    Container(
+                      color: Colors.white,
+                      padding: EdgeInsets.all(8.0),
+                      child: DensityPicker(),
+                    ),
+                  ],
                 ),
                 Expanded(
                   child: ListView.builder(
@@ -64,8 +69,12 @@ class _HomePageState extends State<HomePage> {
                           );
                         }
                       } else if (density == "Medium") {
-                        if (snapshot.data[index].population / snapshot.data[index].area <= 50 ||
-                            snapshot.data[index].population / snapshot.data[index].area >= 200) {
+                        if (snapshot.data[index].population /
+                                    snapshot.data[index].area <=
+                                50 ||
+                            snapshot.data[index].population /
+                                    snapshot.data[index].area >=
+                                200) {
                           return Container();
                         } else {
                           return Container(
@@ -74,7 +83,9 @@ class _HomePageState extends State<HomePage> {
                           );
                         }
                       } else if (density == "High") {
-                        if (snapshot.data[index].population / snapshot.data[index].area < 200) {
+                        if (snapshot.data[index].population /
+                                snapshot.data[index].area <
+                            200) {
                           return Container();
                         } else {
                           return Container(
@@ -219,7 +230,7 @@ class CountryCard extends StatelessWidget {
     return InkWell(
       child: Container(
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Expanded(
               flex: 3,
@@ -256,7 +267,13 @@ class CountryCard extends StatelessWidget {
                 ),
                 padding: EdgeInsets.all(8.0),
               ),
-            )
+            ),
+            country.hardToVisit
+                ? Expanded(
+                    flex: 1,
+                    child: Icon(Icons.warning),
+                  )
+                : Container(),
           ],
         ),
         height: 64.0,

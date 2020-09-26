@@ -6,9 +6,10 @@ const base_url = 'https://restcountries.eu/rest/v2/';
 
 Future<List<Country>> fetchCountries(String region) async {
   // by region
-  final response = (region == 'All') // different API endpoint if we want "all" countries
-      ? await http.get(base_url + 'all')
-      : await http.get(base_url + 'region/' + region);
+  final response =
+      (region == 'All') // different API endpoint if we want "all" countries
+          ? await http.get(base_url + 'all')
+          : await http.get(base_url + 'region/' + region);
 
   return compute(parseCountries, response.body);
 }
@@ -32,6 +33,7 @@ class Country {
   final List<String> currencies;
   final List<String> languages;
   final String flagURL;
+  final bool hardToVisit;
 
   Country(
       {this.name,
@@ -44,7 +46,8 @@ class Country {
       this.longitude,
       this.currencies,
       this.languages,
-      this.flagURL});
+      this.flagURL,
+      this.hardToVisit});
 
   factory Country.fromJson(Map<String, dynamic> json) {
     List<String> currencies = List<String>();
@@ -52,6 +55,27 @@ class Country {
 
     List<String> languages = List<String>();
     for (var language in json['languages']) languages.add(language['name']);
+
+    bool hardToVisit = false;
+    if (json['name'] == 'Russia' ||
+        json['name'] == 'Cuba' ||
+        json['name'] == 'India' ||
+        json['name'] == 'Nauru' ||
+        json['name'] == 'Somalia' ||
+        json['name'] == 'Sudan' ||
+        json['name'] == 'Turkmenistan' ||
+        json['name'] == 'Saudi Arabia' ||
+        json['name'] == 'Iraq' ||
+        json['name'] == 'Bhutan' ||
+        json['name'] == 'Iran' ||
+        json['name'] == 'Libya' ||
+        json['name'] == 'Yemen' ||
+        json['name'] == 'Eritrea' ||
+        json['name'] == 'Angola ' ||
+        json['name'] == 'Central African Republic' ||
+        json['name'] == 'North Korea') {
+      hardToVisit = true;
+    }
 
     return Country(
         name: json['name'],
@@ -64,6 +88,7 @@ class Country {
         longitude: json['latlng'].length != 0 ? json['latlng'][1] : null,
         currencies: currencies,
         languages: languages,
-        flagURL: json['flag']);
+        flagURL: json['flag'],
+        hardToVisit: hardToVisit);
   }
 }
