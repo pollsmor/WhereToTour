@@ -25,9 +25,21 @@ class _HomePageState extends State<HomePage> {
         future: countries,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            print(snapshot.data[0].name);
             return Column(
-
+              children: [
+                RegionPicker(),
+                Expanded(
+                  child: ListView.builder(
+                    padding: EdgeInsets.all(8.0),
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
+                        child: Text(snapshot.data[index].name),
+                      );
+                    },
+                  ),
+                ),
+              ],
             );
           } else {
             return Center(
