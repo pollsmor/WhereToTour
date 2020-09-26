@@ -30,7 +30,7 @@ dependencies:
 
   google_maps_flutter: ^0.5.33
 
-  url_launcher: ^5.7.2
+  webview_flutter: ^0.3.24
 
 dev_dependencies:
   flutter_test:

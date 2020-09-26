@@ -2,8 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'CountriesAPI.dart';
+import 'MyWebView.dart';
 
 class CountryPage extends StatelessWidget {
   final Country country;
@@ -187,7 +187,8 @@ class CountryPage extends StatelessWidget {
                           child: Container(
                             padding: EdgeInsets.all(4.0),
                             decoration: BoxDecoration(
-                              border: Border.all(width: 2.0, color: Colors.blueAccent),
+                              border: Border.all(
+                                  width: 2.0, color: Colors.blueAccent),
                               borderRadius: BorderRadius.circular(8.0),
                             ),
                             child: Column(
@@ -205,7 +206,14 @@ class CountryPage extends StatelessWidget {
                             ),
                           ),
                           onTap: () {
-                            _launchURL(country.currencies[0] + " to USD");
+                            String query = "https://www.google.com/search?q=" +
+                                country.currencies[0] +
+                                " to USD";
+
+                            Navigator.of(context).push(Mat5erialPageRoute(
+                              builder: (BuildContext context) =>
+                                  MyWebView(title: query, url: query),
+                            ));
                           },
                         ),
                       ],
@@ -231,15 +239,6 @@ class CountryPage extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  _launchURL(String query) async {
-    String url = "https://www.google.com/search?q=" + query;
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
   }
 }
 
