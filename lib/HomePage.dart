@@ -3,10 +3,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'CountriesAPI.dart';
 import 'CountryPage.dart';
 
-class HomePage extends StatefulWidget {
-  final String region;
+String density = "All";
+String region = "All";
 
-  HomePage({this.region});
+class HomePage extends StatefulWidget {
+  HomePage();
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -14,14 +15,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Future<List<Country>> countries;
-  bool lowDensity, medDensity, highDensity;
 
   @override
   void initState() {
-    countries = fetchCountries(widget.region);
-    lowDensity = true;
-    medDensity = true;
-    highDensity = true;
+    countries = fetchCountries(region);
 
     super.initState();
   }
@@ -43,79 +40,50 @@ class _HomePageState extends State<HomePage> {
                 Container(
                   color: Colors.white,
                   padding: EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text("Population density"),
-                      GestureDetector(
-                        child: Container(
-                          child: Text(
-                            "Low",
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          ),
-                          padding: EdgeInsets.all(8.0),
-                          width: 72.0,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: lowDensity ? Colors.green : Colors.black,
-                          ),
-                        ),
-                        onTap: () {
-                          setState(() {
-                            lowDensity = !lowDensity;
-                          });
-                        },
-                      ),
-                      GestureDetector(
-                        child: Container(
-                          child: Text(
-                            "Medium",
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          ),
-                          padding: EdgeInsets.all(8.0),
-                          width: 72.0,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: medDensity
-                                ? Colors.orangeAccent[700]
-                                : Colors.black,
-                          ),
-                        ),
-                        onTap: () {
-                          setState(() {
-                            medDensity = !medDensity;
-                          });
-                        },
-                      ),
-                      GestureDetector(
-                        child: Container(
-                          child: Text(
-                            "High",
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          ),
-                          padding: EdgeInsets.all(8.0),
-                          width: 72.0,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: highDensity ? Colors.red : Colors.black,
-                          ),
-                        ),
-                        onTap: () {
-                          setState(() {
-                            highDensity = !highDensity;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
+                  child: DensityPicker(),
                 ),
                 Expanded(
                   child: ListView.builder(
                     itemCount: snapshot.data.length,
                     itemBuilder: (BuildContext context, int index) {
+                      print(density);
+                      if (snapshot.data[index].area == null) {
+                        return Container();
+                      }
+
+                      if (density == "Low") {
+                        if (snapshot.data[index].population /
+                                snapshot.data[index].area >
+                            50) {
+                          print("xd");
+                          return Container();
+                        } else {
+                          return Container(
+                            child: CountryCard(country: snapshot.data[index]),
+                            padding: EdgeInsets.all(4.0),
+                          );
+                        }
+                      } else if (density == "Medium") {
+                        if (snapshot.data[index].population / snapshot.data[index].area <= 50 ||
+                            snapshot.data[index].population / snapshot.data[index].area >= 200) {
+                          return Container();
+                        } else {
+                          return Container(
+                            child: CountryCard(country: snapshot.data[index]),
+                            padding: EdgeInsets.all(4.0),
+                          );
+                        }
+                      } else if (density == "High") {
+                        if (snapshot.data[index].population / snapshot.data[index].area < 200) {
+                          return Container();
+                        } else {
+                          return Container(
+                            child: CountryCard(country: snapshot.data[index]),
+                            padding: EdgeInsets.all(4.0),
+                          );
+                        }
+                      }
+
                       return Container(
                         child: CountryCard(country: snapshot.data[index]),
                         padding: EdgeInsets.all(4.0),
@@ -149,14 +117,12 @@ class RegionPicker extends StatefulWidget {
 }
 
 class _RegionPickerState extends State<RegionPicker> {
-  String region = 'All';
-
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text("Select a region:  "),
+        Text("Region:  "),
         DropdownButton<String>(
           value: region,
           icon: Icon(Icons.language),
@@ -173,7 +139,7 @@ class _RegionPickerState extends State<RegionPicker> {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => HomePage(region: region),
+                    builder: (BuildContext context) => HomePage(),
                   ));
             });
           },
@@ -185,6 +151,53 @@ class _RegionPickerState extends State<RegionPicker> {
             'Asia',
             'Africa'
           ].map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
+}
+
+class DensityPicker extends StatefulWidget {
+  DensityPicker();
+
+  @override
+  _DensityPickerState createState() => _DensityPickerState();
+}
+
+class _DensityPickerState extends State<DensityPicker> {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text("Population density:  "),
+        DropdownButton<String>(
+          value: density,
+          icon: Icon(Icons.accessibility),
+          iconSize: 24,
+          elevation: 16,
+          style: TextStyle(color: Colors.deepPurple),
+          underline: Container(
+            height: 2,
+            color: Colors.deepPurpleAccent,
+          ),
+          onChanged: (String newValue) {
+            setState(() {
+              density = newValue;
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => HomePage(),
+                  ));
+            });
+          },
+          items: <String>['All', 'Low', 'Medium', 'High']
+              .map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
               child: Text(value),
@@ -251,7 +264,8 @@ class CountryCard extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => CountryPage(country: country)),
+          MaterialPageRoute(
+              builder: (context) => CountryPage(country: country)),
         );
       },
     );
