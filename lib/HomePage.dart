@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'CountriesAPI.dart';
+import 'CountryPage.dart';
 
 class HomePage extends StatefulWidget {
   final String region;
@@ -117,7 +118,7 @@ class _HomePageState extends State<HomePage> {
                     itemBuilder: (BuildContext context, int index) {
                       return Container(
                         child: CountryCard(country: snapshot.data[index]),
-                        padding: EdgeInsets.all(8.0),
+                        padding: EdgeInsets.all(4.0),
                       );
                     },
                   ),
@@ -202,49 +203,57 @@ class CountryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            flex: 3,
-            child: Container(
-              child: SvgPicture.network(
-                country.flagURL,
-                semanticsLabel: country.name,
-                placeholderBuilder: (BuildContext context) => Container(
-                  child: Center(
-                    child: SizedBox(
-                      child: CircularProgressIndicator(),
-                      height: 64.0,
-                      width: 32.0,
+    return InkWell(
+      child: Container(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: 3,
+              child: Container(
+                child: SvgPicture.network(
+                  country.flagURL,
+                  semanticsLabel: country.name,
+                  placeholderBuilder: (BuildContext context) => Container(
+                    child: Center(
+                      child: SizedBox(
+                        child: CircularProgressIndicator(),
+                        height: 64.0,
+                        width: 32.0,
+                      ),
                     ),
+                    padding: EdgeInsets.all(8.0),
                   ),
-                  padding: EdgeInsets.all(8.0),
                 ),
+                width: 64.0,
+                height: 64.0,
+                padding: EdgeInsets.all(8.0),
               ),
-              width: 64.0,
-              height: 64.0,
-              margin: EdgeInsets.all(8.0),
             ),
-          ),
-          Expanded(
-            flex: 10,
-            child: Container(
-              child: Text(
-                country.name,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 20.0,
+            Expanded(
+              flex: 10,
+              child: Container(
+                child: Text(
+                  country.name,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 20.0,
+                  ),
                 ),
+                padding: EdgeInsets.all(8.0),
               ),
-              padding: EdgeInsets.all(8.0),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
+        height: 64.0,
       ),
-      height: 64.0,
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => CountryPage(country: country)),
+        );
+      },
     );
   }
 }

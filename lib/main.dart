@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'HomePage.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-Future main() async {
-  await DotEnv().load('.env');
+void main() {
   runApp(MyApp());
 }
 
@@ -14,8 +12,8 @@ class MyApp extends StatelessWidget {
       title: 'WhereToTour',
       theme: ThemeData(
         textTheme: TextTheme(
-          //bodyText2: TextStyle(color: Colors.white),
-        ),
+            //bodyText2: TextStyle(color: Colors.white),
+            ),
         scaffoldBackgroundColor: Colors.white,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
