@@ -31,7 +31,7 @@ class CountryPage extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            flex: 5,
+            flex: 6,
             child: Container(
               padding: EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 8.0),
               child: Column(
@@ -211,8 +211,9 @@ class CountryPage extends StatelessWidget {
                                 " to USD";
 
                             Navigator.of(context).push(MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  MyWebView(title: query, url: query),
+                              builder: (BuildContext context) => MyWebView(
+                                  title: country.currencies[0] + " to USD",
+                                  url: query),
                             ));
                           },
                         ),
