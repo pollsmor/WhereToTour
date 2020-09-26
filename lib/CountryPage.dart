@@ -210,7 +210,7 @@ class CountryPage extends StatelessWidget {
                                 country.currencies[0] +
                                 " to USD";
 
-                            Navigator.of(context).push(Mat5erialPageRoute(
+                            Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) =>
                                   MyWebView(title: query, url: query),
                             ));
